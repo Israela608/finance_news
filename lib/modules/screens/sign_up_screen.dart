@@ -1,9 +1,14 @@
 import 'package:finance_news/common/loading_stack.dart';
+import 'package:finance_news/common/plain_text_field.dart';
+import 'package:finance_news/common/show_custom_snackbar.dart';
+import 'package:finance_news/core/helper/navigation.dart';
 import 'package:finance_news/core/utils/app_colors.dart';
 import 'package:finance_news/core/utils/app_styles.dart';
 import 'package:finance_news/core/utils/extensions.dart';
+import 'package:finance_news/core/utils/utils.dart';
 import 'package:finance_news/core/utils/validators.dart';
 import 'package:finance_news/modules/providers/sign_up_provider.dart';
+import 'package:finance_news/modules/screens/allow_notifications_screen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -70,6 +75,7 @@ class SignUpScreen extends StatelessWidget {
               ],
             ),
           ),
+          floatingActionButton: NextButton(formKey: formKey),
         ),
       ),
     );
@@ -86,12 +92,12 @@ class FirstNameBox extends HookConsumerWidget {
 
     return PlainTextField(
       textController: textController,
-      hintText: 'Full name',
+      hintText: 'First name',
       keyboardType: TextInputType.text,
       textInputAction: TextInputAction.next,
       validatorCallback: Validators.validateAlpha(
         isValidated: (value) {
-          signUpNotifier.isFullNameValidated = value;
+          signUpNotifier.isFirstNameValidated = value;
         },
         function: signUpNotifier.updateButton,
       ),
@@ -105,36 +111,8 @@ class FirstNameBox extends HookConsumerWidget {
   }
 }
 
-class PhoneBox extends HookConsumerWidget {
-  const PhoneBox({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final textController = useTextEditingController();
-    final signUpNotifier = ref.read(signUpNotifierProvider.notifier);
-
-    return PhoneTextField(
-      textController: textController,
-      hintText: 'Phone Number',
-      textInputAction: TextInputAction.next,
-      onValidatedCallback: (bool value) {
-        debugPrint(value.toString()); //true if input is validated, false if not
-        signUpNotifier.isPhoneValidated = value;
-        signUpNotifier.updateButton;
-      },
-      onChangedCallback: (value) {
-        signUpNotifier.phone = value;
-      },
-      onSavedCallback: (value) {
-        debugPrint(value.toString());
-        signUpNotifier.phone = value ?? '';
-      },
-    );
-  }
-}
-
-class EmailBox extends HookConsumerWidget {
-  const EmailBox({super.key});
+class LastNameBox extends HookConsumerWidget {
+  const LastNameBox({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -143,12 +121,12 @@ class EmailBox extends HookConsumerWidget {
 
     return PlainTextField(
       textController: textController,
-      hintText: 'Email Address',
-      keyboardType: TextInputType.emailAddress,
+      hintText: 'Last name',
+      keyboardType: TextInputType.text,
       textInputAction: TextInputAction.next,
-      validatorCallback: Validators.validateEmail(
+      validatorCallback: Validators.validateAlpha(
         isValidated: (value) {
-          signUpNotifier.isEmailValidated = value;
+          signUpNotifier.isLastNameValidated = value;
         },
         function: signUpNotifier.updateButton,
       ),
@@ -162,96 +140,6 @@ class EmailBox extends HookConsumerWidget {
   }
 }
 
-class PasswordBox extends HookConsumerWidget {
-  const PasswordBox({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final textController = useTextEditingController();
-    final isObscure = useState(true);
-    final signUpNotifier = ref.read(signUpNotifierProvider.notifier);
-
-    return PasswordTextField(
-      textController: textController,
-      hintText: 'Password',
-      isObscure: isObscure.value,
-      onObscurePressedCallback: () {
-        isObscure.value = !isObscure.value;
-      },
-      textInputAction: TextInputAction.next,
-      validatorCallback: Validators.validatePassword(
-        isValidated: (value) {
-          signUpNotifier.isPasswordValidated = value;
-        },
-        function: signUpNotifier.updateButton,
-      ),
-      onChangedCallback: (value) {
-        signUpNotifier.password = value;
-      },
-      onSavedCallback: (value) {
-        signUpNotifier.password = value ?? '';
-      },
-    );
-  }
-}
-
-class ConfirmPasswordBox extends HookConsumerWidget {
-  const ConfirmPasswordBox({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final textController = useTextEditingController();
-    final isObscure = useState(true);
-    final signUpNotifier = ref.read(signUpNotifierProvider.notifier);
-    final signUpState = ref.watch(signUpNotifierProvider);
-
-    return PasswordTextField(
-      textController: textController,
-      hintText: 'Confirm Password',
-      isObscure: isObscure.value,
-      onObscurePressedCallback: () {
-        isObscure.value = !isObscure.value;
-      },
-      textInputAction: TextInputAction.done,
-      validatorCallback: Validators.validateConfirmPassword(
-        password: signUpState.password,
-        isValidated: (value) {
-          signUpNotifier.isConfirmPasswordValidated = value;
-        },
-        function: signUpNotifier.updateButton,
-      ),
-      onChangedCallback: (value) {
-        signUpNotifier.confirmPassword = value;
-      },
-      onSavedCallback: (value) {
-        signUpNotifier.confirmPassword = value ?? '';
-      },
-    );
-  }
-}
-
-class GoogleSignUp extends HookConsumerWidget {
-  const GoogleSignUp({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return GoogleButton(
-      onPress: () async {
-        final signUpNotifier = ref.read(signUpNotifierProvider.notifier);
-        await signUpNotifier.signUpWithGoogle(isPatient: true);
-
-        final signUpState = ref.read(signUpNotifierProvider);
-        final credentials = ref.read(userCredentialsProvider);
-        if (signUpState.isSuccess) {
-          signInNavigation(context, credentials: credentials, ref: ref);
-        } else {
-          showCustomSnackBar(context, message: signUpState.response.message);
-        }
-      },
-    );
-  }
-}
-
 class NextButton extends HookConsumerWidget {
   const NextButton({super.key, required this.formKey});
 
@@ -259,70 +147,37 @@ class NextButton extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return WideButton(
-      text: 'Next',
-      //isEnabled: model.isCompleted,
+    bool isCompleted = ref.watch(signUpNotifierProvider).isCompleted;
+
+    return FloatingActionButton(
       onPressed: () async {
         if (formKey.currentState!.validate()) {
           final signUpNotifier = ref.read(signUpNotifierProvider.notifier);
-          await signUpNotifier.signUp(isPatient: true);
+          await signUpNotifier.signUp();
 
-          final signUpState = ref.read(signUpNotifierProvider);
-          if (signUpState.isSuccess) {
+          final response = ref.read(signUpNotifierProvider).response;
+
+          if (response.isSuccess) {
             return Navigation.gotoWidget(
               context,
-              // replacePreviousScreen: true,
-              OtpScreen(
-                lastName: signUpState.lastName.toLowerCase().trim(),
-              ),
+              replacePreviousScreen: true,
+              AllowNotificationsScreen(),
             );
           } else {
-            showCustomSnackBar(context, message: signUpState.response.message);
+            showCustomSnackBar(
+              context,
+              message: response.message,
+            );
           }
         }
       },
-    );
-  }
-}
-
-class SignInText extends StatelessWidget {
-  const SignInText({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          getSvg(
-            svg: 'arrow-left',
-            height: 16.59,
-            width: 16.59,
-            color: AppThemes.darkButton(context),
-          ),
-          WidthSpacer(width: 2.41),
-          Text.rich(
-            TextSpan(
-              style: AppStyle.labelStyleBold(context),
-              children: [
-                TextSpan(
-                  text: "Already have an account?",
-                ),
-                TextSpan(
-                  text: ' Sign in ',
-                  style: AppStyle.labelStyleBlueBold(context),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      Navigation.gotoWidget(
-                        context,
-                        SignInScreen(),
-                      );
-                    },
-                ),
-              ],
-            ),
-          ),
-        ],
+      backgroundColor: isCompleted
+          ? AppColor.primary600
+          : AppColor.primary600.withOpacity(0.4),
+      child: getSvg(
+        svg: 'chevron-right',
+        height: 24,
+        width: 24,
       ),
     );
   }
