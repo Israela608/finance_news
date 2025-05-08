@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:finance_news/common/loading_stack.dart';
 import 'package:finance_news/core/helper/navigation.dart';
 import 'package:finance_news/core/providers/news_provider.dart';
 import 'package:finance_news/core/providers/paginated_news_provider.dart';
@@ -8,32 +9,29 @@ import 'package:finance_news/core/utils/converters.dart';
 import 'package:finance_news/core/utils/extensions.dart';
 import 'package:finance_news/data/models/news.dart';
 import 'package:finance_news/data/repos/user_repo.dart';
+import 'package:finance_news/modules/providers/news_provider.dart';
 import 'package:finance_news/modules/screens/news_detail_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class NewsScreen extends ConsumerStatefulWidget {
+class NewsScreen extends HookWidget {
   const NewsScreen({super.key});
 
-  @override
-  ConsumerState<NewsScreen> createState() => _NewsPageState();
-}
-
-class _NewsPageState extends ConsumerState<NewsScreen> {
-  String? _firstName;
+  // String? _firstName;
   // final ScrollController _controller = ScrollController();
 
-  _getFirstName() async {
+  /*_getFirstName() async {
     _firstName = await UserRepo.getFirstName();
-  }
+  }*/
 
-  @override
+  /*@override
   void initState() {
     super.initState();
     // _controller.addListener(_onScroll);
     _getFirstName();
-  }
+  }*/
 
   /*void _onScroll() {
     if (_controller.position.pixels == _controller.position.maxScrollExtent) {
@@ -43,43 +41,60 @@ class _NewsPageState extends ConsumerState<NewsScreen> {
 */
   @override
   Widget build(BuildContext context) {
-    final newsList = ref.watch(paginatedNewsProvider);
+    String? _firstName;
 
-    return Scaffold(
-      backgroundColor: AppColor.black,
-      body: SafeArea(
-        child: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.only(
-                left: 16.w,
-                right: 16.w,
-                top: 22.h,
-                bottom: 22.h,
-              ),
-              decoration: const BoxDecoration(
-                color: Colors.transparent,
-              ),
-              child: Text(
-                _firstName != null ? 'Hey $_firstName' : '',
-                style: AppStyle.titleStyleWhite(context),
-              ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                //controller: _controller,
-                shrinkWrap: true,
-                padding: EdgeInsets.zero,
-                itemCount: newsList.length,
-                itemBuilder: (context, index) => ListTile(
-                  title: NewsTile(
-                    firstName: _firstName ?? '',
-                    news: newsList[index],
-                  ),
+    _getFirstName() async {
+      _firstName = await UserRepo.getFirstName();
+    }
+
+    useEffect(() {
+      _getFirstName();
+
+      return null;
+    }, []);
+
+    return LoadingStack(
+      loadingProvider: newsLoadingProvider,
+      child: Scaffold(
+        backgroundColor: AppColor.black,
+        body: SafeArea(
+          child: Column(
+            children: [
+              Container(
+                padding: EdgeInsets.only(
+                  left: 16.w,
+                  right: 16.w,
+                  top: 22.h,
+                  bottom: 22.h,
+                ),
+                decoration: const BoxDecoration(
+                  color: Colors.transparent,
+                ),
+                child: Text(
+                  _firstName != null ? 'Hey $_firstName' : '',
+                  style: AppStyle.titleStyleWhite(context),
                 ),
               ),
-            ),
-          ],
+              Expanded(
+                child: Consumer(builder: (context, ref, child) {
+                  final newsList = ref.watch(newsProvider).news;
+
+                  return ListView.builder(
+                    //controller: _controller,
+                    shrinkWrap: true,
+                    padding: EdgeInsets.zero,
+                    itemCount: newsList.length,
+                    itemBuilder: (context, index) => ListTile(
+                      title: NewsTile(
+                        firstName: _firstName ?? '',
+                        news: newsList[index],
+                      ),
+                    ),
+                  );
+                }),
+              ),
+            ],
+          ),
         ),
       ),
     );

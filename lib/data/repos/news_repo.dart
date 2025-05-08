@@ -18,7 +18,7 @@ class NewsRepo {
   ApiClient apiClient;
   final dbHelper = DatabaseHelper();
 
-  Future<List<News>> getAppointments() async {
+  Future<List<News>> getNews() async {
     final data = await apiClient.getData(ApiConstants.newsUrI);
     // Assume the API sends a list of news. Adjust as needed.
     return News.fromListJson(data);
