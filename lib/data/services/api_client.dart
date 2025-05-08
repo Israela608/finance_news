@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:finance_news/data/constants/api_constants.dart';
@@ -22,26 +23,17 @@ class ApiClient {
     token = ApiConstants.token;
   }
 
-  Future<Map<String, String>> requestHeaders({bool useToken = true}) async {
-    final headers = <String, String>{
-      'Content-Type': 'application/json',
-      if (token.isNotEmpty && (useToken)) 'Authorization': 'Bearer $token',
-    };
-    return headers;
-  }
-
   Future<dynamic> getData(
     String uri, {
     bool useToken = true,
   }) async {
-    debugPrint('GET URL:   $baseUrl$uri');
+    log('GET URL:   $baseUrl$uri${useToken ? '&token=$token' : ''}');
     var responseJson;
 
     try {
       final response = await http
           .get(
-            Uri.parse(baseUrl + uri),
-            headers: await requestHeaders(useToken: useToken),
+            Uri.parse(baseUrl + uri + '${useToken ? '&token=$token' : ''}'),
           )
           .timeout(timeoutDuration);
       //log('GET API RESPONSE:   ${response.body}');
@@ -56,14 +48,14 @@ class ApiClient {
   }
 
   dynamic _returnResponse(http.Response response) {
-    debugPrint('STATUS CODE => ${response.statusCode}');
+    log('STATUS CODE => ${response.statusCode}');
     if (response.statusCode >= 200 && response.statusCode < 300) {
       return json.decode(response.body);
     }
 
     String message = 'There was an Error!';
 
-    debugPrint('Error: $message : ${response.statusCode}');
+    log('Error: $message : ${response.statusCode}');
     switch (response.statusCode) {
       case 400:
         throw BadRequestException(message);

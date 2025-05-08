@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:finance_news/data/repos/user_repo.dart';
 import 'package:finance_news/modules/models/sign_up_state.dart';
 import 'package:flutter/foundation.dart';
@@ -29,12 +31,17 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
 
   Future<void> signUp() async {
     state = state.setLoading('');
-    debugPrint('Signing Up');
+    log('Signing Up');
 
     final response = await userRepo.saveUserCredentials(
       state.firstName.trim(),
       state.lastName.trim(),
     );
-    state = state.copyWith(response: response);
+
+    // Show Splash for 1 seconds
+    await Future.delayed(Duration(seconds: 1), () {
+      state = state.copyWith(response: response);
+    });
+    //state = state.copyWith(response: response);
   }
 }

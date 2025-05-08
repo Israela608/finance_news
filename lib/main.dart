@@ -57,11 +57,12 @@ class AuthWrapper extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isSplashComplete = useState(false);
-    String? _firstName;
+    final _firstName = useState<String?>(null);
+    // final _firstName = ref.watch(userRepoProvider).getFirstName();
     PermissionStatus? _notificationStatus;
 
     _init() async {
-      _firstName = await UserRepo.getFirstName();
+      await UserRepo.getFirstName().then((value) => _firstName.value = value);
       _notificationStatus = await Permission.notification.status;
     }
 
@@ -76,15 +77,22 @@ class AuthWrapper extends HookConsumerWidget {
 
     if (!isSplashComplete.value) return SplashScreen();
 
-    if (_firstName == null) return SignUpScreen();
+    if (_firstName.value == null) return SignUpScreen();
 
-    if (_firstName!.isEmpty) return SignUpScreen();
+    if (_firstName.value!.isEmpty) return SignUpScreen();
 
     if (_notificationStatus == PermissionStatus.denied ||
         _notificationStatus == PermissionStatus.permanentlyDenied) {
       return AllowNotificationsScreen();
-    } else {
+    }
+
+    if (_notificationStatus != PermissionStatus.denied &&
+        _notificationStatus != PermissionStatus.permanentlyDenied) {
       return NewsScreen();
     }
+
+    return const Scaffold(
+      body: CircularProgressIndicator(),
+    );
   }
 }

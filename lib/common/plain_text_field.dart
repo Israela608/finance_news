@@ -40,7 +40,7 @@ class PlainTextField extends StatelessWidget {
       textInputAction: textInputAction,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       maxLines: maxLines,
-      style: AppStyle.bodyStyle(context),
+      style: AppStyle.bodyStyle(context)?.copyWith(decorationThickness: 0),
       cursorColor: AppColor.muted300,
       decoration: InputDecoration(
         hintText: hintText,
