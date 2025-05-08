@@ -3,14 +3,14 @@ import 'package:finance_news/core/providers/paginated_news_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class NewsPage extends ConsumerStatefulWidget {
-  const NewsPage({super.key});
+class NewsScreen extends ConsumerStatefulWidget {
+  const NewsScreen({super.key});
 
   @override
-  ConsumerState<NewsPage> createState() => _NewsPageState();
+  ConsumerState<NewsScreen> createState() => _NewsPageState();
 }
 
-class _NewsPageState extends ConsumerState<NewsPage> {
+class _NewsPageState extends ConsumerState<NewsScreen> {
   final ScrollController _controller = ScrollController();
 
   @override
