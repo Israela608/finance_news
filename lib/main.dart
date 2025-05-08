@@ -1,10 +1,15 @@
 import 'package:finance_news/core/utils/constants.dart';
-import 'package:finance_news/screens/splash_screen.dart';
+import 'package:finance_news/data/repos/user_repo.dart';
+import 'package:finance_news/modules/screens/allow_notifications_screen.dart';
+import 'package:finance_news/modules/screens/news_screen.dart';
+import 'package:finance_news/modules/screens/sign_up_screen.dart';
+import 'package:finance_news/modules/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -52,9 +57,16 @@ class AuthWrapper extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isSplashComplete = useState(false);
-    final credentials = ref.watch(userCredentialsProvider);
+    String? _firstName;
+    PermissionStatus? _notificationStatus;
+
+    _init() async {
+      _firstName = await UserRepo.getFirstName();
+      _notificationStatus = await Permission.notification.status;
+    }
 
     useEffect(() {
+      _init();
       // Show Splash for 3 seconds
       Future.delayed(Duration(seconds: 3), () {
         isSplashComplete.value = true;
@@ -64,16 +76,15 @@ class AuthWrapper extends HookConsumerWidget {
 
     if (!isSplashComplete.value) return SplashScreen();
 
-    if (!_isOnboardingViewed) return OnboardingScreen();
+    if (_firstName == null) return SignUpScreen();
 
-    if (credentials.setupIncomplete) {
-      return WelcomeScreen();
+    if (_firstName!.isEmpty) return SignUpScreen();
+
+    if (_notificationStatus == PermissionStatus.denied ||
+        _notificationStatus == PermissionStatus.permanentlyDenied) {
+      return AllowNotificationsScreen();
+    } else {
+      return NewsScreen();
     }
-
-    if (credentials.userType != null) return PinLoginScreen();
-
-    return const Scaffold(
-      body: CustomLoader(),
-    );
   }
 }
