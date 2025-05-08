@@ -16,7 +16,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class NewsScreen extends HookWidget {
+class NewsScreen extends HookConsumerWidget {
   const NewsScreen({super.key});
 
   // String? _firstName;
@@ -40,7 +40,7 @@ class NewsScreen extends HookWidget {
   }
 */
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     String? _firstName;
 
     _getFirstName() async {
@@ -55,45 +55,50 @@ class NewsScreen extends HookWidget {
 
     return LoadingStack(
       loadingProvider: newsLoadingProvider,
-      child: Scaffold(
-        backgroundColor: AppColor.black,
-        body: SafeArea(
-          child: Column(
-            children: [
-              Container(
-                padding: EdgeInsets.only(
-                  left: 16.w,
-                  right: 16.w,
-                  top: 22.h,
-                  bottom: 22.h,
+      child: RefreshIndicator(
+        onRefresh: () async {
+          ref.read(newsProvider.notifier).fetchNews();
+        },
+        child: Scaffold(
+          backgroundColor: AppColor.black,
+          body: SafeArea(
+            child: Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.only(
+                    left: 16.w,
+                    right: 16.w,
+                    top: 22.h,
+                    bottom: 22.h,
+                  ),
+                  decoration: const BoxDecoration(
+                    color: Colors.transparent,
+                  ),
+                  child: Text(
+                    _firstName != null ? 'Hey $_firstName' : '',
+                    style: AppStyle.titleStyleWhite(context),
+                  ),
                 ),
-                decoration: const BoxDecoration(
-                  color: Colors.transparent,
-                ),
-                child: Text(
-                  _firstName != null ? 'Hey $_firstName' : '',
-                  style: AppStyle.titleStyleWhite(context),
-                ),
-              ),
-              Expanded(
-                child: Consumer(builder: (context, ref, child) {
-                  final newsList = ref.watch(newsProvider).news;
+                Expanded(
+                  child: Consumer(builder: (context, ref, child) {
+                    final newsList = ref.watch(newsProvider).news;
 
-                  return ListView.builder(
-                    //controller: _controller,
-                    shrinkWrap: true,
-                    padding: EdgeInsets.zero,
-                    itemCount: newsList.length,
-                    itemBuilder: (context, index) => ListTile(
-                      title: NewsTile(
-                        firstName: _firstName ?? '',
-                        news: newsList[index],
+                    return ListView.builder(
+                      //controller: _controller,
+                      shrinkWrap: true,
+                      padding: EdgeInsets.zero,
+                      itemCount: newsList.length,
+                      itemBuilder: (context, index) => ListTile(
+                        title: NewsTile(
+                          firstName: _firstName ?? '',
+                          news: newsList[index],
+                        ),
                       ),
-                    ),
-                  );
-                }),
-              ),
-            ],
+                    );
+                  }),
+                ),
+              ],
+            ),
           ),
         ),
       ),
