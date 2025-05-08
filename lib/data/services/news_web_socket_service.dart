@@ -217,7 +217,7 @@ class NewsWebSocketService {
       if (message.room == state.chat.id) {
         debugPrint('Message id for this room');
         // Only add messages of the other user and not messages of the sender
-        if (message.sender != state.chat.patient?.email) {
+        if (message.sender != state.chat.patient?.lastName) {
           debugPrint('DISPLAYING MESSAGE');
           await addMessage(message);
           // Update Delivery Status of the Other user
@@ -268,7 +268,7 @@ class NewsWebSocketService {
 
       if (eventData['room'] == state.chat.id) {
         // The Other user is the Pharmacist
-        if (eventData['sender'] == state.chat.pharmacist?.email) {
+        if (eventData['sender'] == state.chat.pharmacist?.lastName) {
           //  log('Interaction is for this room');
           // Only update messages of the other user and not messages of the sender
           debugPrint(
