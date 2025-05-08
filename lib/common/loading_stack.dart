@@ -1,6 +1,8 @@
 import 'package:finance_news/core/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LoadingStack extends StatelessWidget {
   const LoadingStack({
@@ -8,7 +10,7 @@ class LoadingStack extends StatelessWidget {
     required this.loadingProvider,
     required this.child,
     this.color = AppColor.primary600,
-    this.progressIndicator = const CircularProgressIndicator(),
+    this.progressIndicator = const CustomLoader(),
     this.opacity = 0.5,
   });
 
@@ -39,6 +41,22 @@ class LoadingStack extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class CustomLoader extends StatelessWidget {
+  const CustomLoader({super.key, this.color, this.size});
+
+  final Color? color;
+  final double? size;
+
+  @override
+  Widget build(BuildContext context) {
+    return SpinKitFadingCircle(
+      duration: const Duration(milliseconds: 700),
+      color: color ?? AppColor.white,
+      size: size?.h ?? 50.h,
     );
   }
 }

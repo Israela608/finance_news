@@ -41,6 +41,7 @@ class SignUpScreen extends StatelessWidget {
                   decoration: const BoxDecoration(
                     color: Colors.transparent,
                   ),
+                  alignment: Alignment.centerLeft,
                   child: Text(
                     'Your legal name',
                     style: AppStyle.titleStyle(context),
@@ -58,7 +59,7 @@ class SignUpScreen extends StatelessWidget {
                             //const HeightSpacer(height: 80),
                             16.height,
                             Text(
-                              'Paginated Real-Time News',
+                              'We need to know a bit about you so that we can create your account.',
                               style: AppStyle.subtitleStyle(context),
                             ),
                             24.height,
@@ -160,7 +161,7 @@ class NextButton extends HookConsumerWidget {
           if (response.isSuccess) {
             return Navigation.gotoWidget(
               context,
-              replacePreviousScreen: true,
+             // replacePreviousScreen: true,
               AllowNotificationsScreen(),
             );
           } else {
@@ -171,6 +172,7 @@ class NextButton extends HookConsumerWidget {
           }
         }
       },
+      shape: CircleBorder(),
       backgroundColor: isCompleted
           ? AppColor.primary600
           : AppColor.primary600.withOpacity(0.4),
@@ -178,6 +180,7 @@ class NextButton extends HookConsumerWidget {
         svg: 'chevron-right',
         height: 24,
         width: 24,
+        fit: BoxFit.scaleDown,
       ),
     );
   }

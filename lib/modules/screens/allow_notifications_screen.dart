@@ -22,22 +22,31 @@ class AllowNotificationsScreen extends StatelessWidget {
         child: Column(
           children: [
             234.height,
-            getSvg(
-              svg: 'message-notif',
-              height: 98,
-              width: 98,
+            Expanded(
+              child: Column(
+                children: [
+                  Flexible(
+                    child: getSvg(
+                      svg: 'message-notif',
+                      height: 98,
+                      width: 98,
+                    ),
+                  ),
+                  24.height,
+                  Text(
+                    'Get the most out of Blott ✅',
+                    textAlign: TextAlign.center,
+                    style: AppStyle.titleStyleSmall(context),
+                  ),
+                  16.height,
+                  Text(
+                    'Allow notifications to stay in the loop with your payments, requests and groups.',
+                    style: AppStyle.subtitleStyle(context),
+                  ),
+                ],
+              ),
             ),
-            24.height,
-            Text(
-              'Get the most out of Blott ✅',
-              style: AppStyle.titleStyleSmall(context),
-            ),
-            16.height,
-            Text(
-              'Allow notifications to stay in the loop with your payments, requests and groups.',
-              style: AppStyle.subtitleStyle(context),
-            ),
-            Spacer(),
+            // Spacer(),
             ContinueButton(),
             48.height,
           ],

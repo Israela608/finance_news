@@ -25,6 +25,7 @@ class AppAlertDialog extends StatelessWidget {
     return AlertDialog(
       title: Text(title),
       content: Text(subtitle),
+      alignment: Alignment.center,
       actions: [
         if (showCancel) ...[
           ElevatedButton(

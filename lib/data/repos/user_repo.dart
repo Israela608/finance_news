@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:finance_news/core/helper/database_helper.dart';
 import 'package:finance_news/core/utils/constants.dart';
 import 'package:finance_news/data/models/response.dart';
@@ -18,9 +20,9 @@ class UserRepo {
         dbHelper.save(AppConst.firstName, firstName),
         dbHelper.save(AppConst.lastName, lastName),
       ]);
-      return Response.success(true);
+      return Response.success('Saved Successfully!');
     } catch (e) {
-      debugPrint('Failed to save user credentials: $e');
+      log('Failed to save user credentials: $e');
       return Response.error('Failed to save user credentials');
     }
   }
@@ -30,7 +32,7 @@ class UserRepo {
       final dbHelper = DatabaseHelper();
       return await dbHelper.read(AppConst.firstName);
     } catch (e) {
-      debugPrint('Failed to get First Name: $e');
+      log('Failed to get First Name: $e');
       return null;
     }
   }

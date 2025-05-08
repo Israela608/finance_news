@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:finance_news/core/utils/app_colors.dart';
 import 'package:finance_news/core/utils/app_styles.dart';
 import 'package:flutter/material.dart';
@@ -29,13 +31,13 @@ class _NewsDetailScreen extends State<NewsDetailScreen> {
       ..setNavigationDelegate(
         NavigationDelegate(
           onPageStarted: (String url) {
-            debugPrint("On page started url : $url");
+            log("On page started url : $url");
             setState(() {
               loadingPercentage = 0;
             });
           },
           onProgress: (int progress) {
-            debugPrint("Page progress : $progress");
+            log("Page progress : $progress");
             setState(() {
               loadingPercentage = progress;
             });
@@ -47,10 +49,10 @@ class _NewsDetailScreen extends State<NewsDetailScreen> {
             });
           },
           onHttpError: (HttpResponseError error) {
-            debugPrint('HTTP Error => $error');
+            log('HTTP Error => $error');
           },
           onWebResourceError: (WebResourceError error) {
-            debugPrint('Web Resource Error => $error');
+            log('Web Resource Error => $error');
           },
         ),
       )
@@ -62,26 +64,30 @@ class _NewsDetailScreen extends State<NewsDetailScreen> {
     return Scaffold(
       backgroundColor: AppColor.black,
       body: SafeArea(
-        child: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.only(
-                left: 16.w,
-                right: 16.w,
-                top: 22.h,
-                bottom: 22.h,
+        child: RefreshIndicator(
+          onRefresh: () async {
+            controller.reload();
+          },
+          child: Column(
+            children: [
+              Container(
+                padding: EdgeInsets.only(
+                  left: 16.w,
+                  right: 16.w,
+                  top: 22.h,
+                  bottom: 22.h,
+                ),
+                decoration: const BoxDecoration(
+                  color: Colors.transparent,
+                ),
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Hey ${widget.firstName}',
+                  textScaler: TextScaler.noScaling,
+                  style: AppStyle.titleStyleWhite(context),
+                ),
               ),
-              decoration: const BoxDecoration(
-                color: Colors.transparent,
-              ),
-              child: Text(
-                'Hey ${widget.firstName}',
-                style: AppStyle.titleStyleWhite(context),
-              ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.only(top: 20.h),
+              Expanded(
                 child: Stack(
                   children: [
                     WebViewWidget(controller: controller),
@@ -96,8 +102,8 @@ class _NewsDetailScreen extends State<NewsDetailScreen> {
                   ],
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

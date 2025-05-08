@@ -19,32 +19,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class NewsScreen extends HookConsumerWidget {
   const NewsScreen({super.key});
 
-  // String? _firstName;
-  // final ScrollController _controller = ScrollController();
-
-  /*_getFirstName() async {
-    _firstName = await UserRepo.getFirstName();
-  }*/
-
-  /*@override
-  void initState() {
-    super.initState();
-    // _controller.addListener(_onScroll);
-    _getFirstName();
-  }*/
-
-  /*void _onScroll() {
-    if (_controller.position.pixels == _controller.position.maxScrollExtent) {
-      ref.read(paginatedNewsProvider.notifier).loadNextPage();
-    }
-  }
-*/
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    String? _firstName;
+    final _firstName = useState<String?>(null);
 
     _getFirstName() async {
-      _firstName = await UserRepo.getFirstName();
+      _firstName.value = await UserRepo.getFirstName();
     }
 
     useEffect(() {
@@ -74,8 +54,10 @@ class NewsScreen extends HookConsumerWidget {
                   decoration: const BoxDecoration(
                     color: Colors.transparent,
                   ),
+                  alignment: Alignment.centerLeft,
                   child: Text(
-                    _firstName != null ? 'Hey $_firstName' : '',
+                    _firstName.value != null ? 'Hey ${_firstName.value}' : '',
+                    textScaler: TextScaler.noScaling,
                     style: AppStyle.titleStyleWhite(context),
                   ),
                 ),
@@ -90,7 +72,7 @@ class NewsScreen extends HookConsumerWidget {
                       itemCount: newsList.length,
                       itemBuilder: (context, index) => ListTile(
                         title: NewsTile(
-                          firstName: _firstName ?? '',
+                          firstName: _firstName.value ?? '',
                           news: newsList[index],
                         ),
                       ),
@@ -104,12 +86,6 @@ class NewsScreen extends HookConsumerWidget {
       ),
     );
   }
-
-  /*@override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }*/
 }
 
 class NewsTile extends StatelessWidget {
@@ -131,12 +107,12 @@ class NewsTile extends StatelessWidget {
         );
       },
       child: Padding(
-        padding: EdgeInsets.all(16.h),
+        padding: EdgeInsets.symmetric(vertical: 16.h),
         child: Row(
           children: [
             CachedNetworkImage(
               imageUrl: news.image ?? '',
-              placeholder: (context, url) => CircularProgressIndicator(),
+              placeholder: (context, url) => CustomLoader(size: 25),
               errorWidget: (context, url, error) => Icon(Icons.error),
               width: 100.w,
               height: 100.h,
@@ -152,13 +128,16 @@ class NewsTile extends StatelessWidget {
               child: Column(
                 children: [
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        news.source ?? '',
+                        news.source?.toUpperCase() ?? '',
+                        textScaler: TextScaler.noScaling,
                         style: AppStyle.bodyWhiteSmallStyle(context),
                       ),
                       Text(
-                        formatUnixDate(news.datetime),
+                        formatUnixDate(news.datetime).toUpperCase(),
+                        textScaler: TextScaler.noScaling,
                         style: AppStyle.bodyWhiteSmallStyle(context),
                       ),
                     ],
@@ -166,6 +145,9 @@ class NewsTile extends StatelessWidget {
                   8.height,
                   Text(
                     news.headline ?? '',
+                    textScaler: TextScaler.noScaling,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
                     style: AppStyle.bodyWhiteSmallBig(context),
                   ),
                 ],
@@ -177,26 +159,3 @@ class NewsTile extends StatelessWidget {
     );
   }
 }
-
-/*class NewsScreen extends ConsumerWidget {
-  const NewsScreen({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final newsAsyncValue = ref.watch(newsStreamProvider);
-
-    return Scaffold(
-      appBar: AppBar(title: Text('Real-Time News')),
-      body: newsAsyncValue.when(
-        data: (newsList) => ListView.builder(
-          itemCount: newsList.length,
-          itemBuilder: (context, index) => ListTile(
-            title: Text(newsList[index]),
-          ),
-        ),
-        loading: () => Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('Error: $e')),
-      ),
-    );
-  }
-}*/

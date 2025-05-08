@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:finance_news/common/custom_notification_dialog.dart';
 import 'package:flutter/material.dart';
 
@@ -8,7 +10,7 @@ void showCustomSnackBar(
   bool isError = true,
   String logMessage = '',
 }) {
-  debugPrint('SNACKBAR LOG => ${logMessage.isNotEmpty ? logMessage : message}');
+  log('SNACKBAR LOG => ${logMessage.isNotEmpty ? logMessage : message}');
 
   final overlay = Overlay.of(context);
   final overlayEntry = OverlayEntry(
