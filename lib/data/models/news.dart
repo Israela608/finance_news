@@ -1,21 +1,30 @@
 import 'package:equatable/equatable.dart';
 
 class News extends Equatable {
-  final String? bankName;
-  final String? accountName;
-  final String? accountNumber;
+  final int? datetime;
+  final String? headline;
+  final int? id;
+  final String? image;
+  final String? source;
+  final String? url;
 
   const News({
-    this.bankName,
-    this.accountName,
-    this.accountNumber,
+    this.datetime,
+    this.headline,
+    this.id,
+    this.image,
+    this.source,
+    this.url,
   });
 
   factory News.fromJson(Map<String, dynamic> json) {
     return News(
-      bankName: json['bank_name'] as String?,
-      accountName: json['account_name'] as String?,
-      accountNumber: json['account_number'] as String?,
+      datetime: json['datetime'],
+      headline: json['headline'],
+      id: json['id'],
+      image: json['image'],
+      source: json['source'],
+      url: json['url'],
     );
   }
 
@@ -27,5 +36,5 @@ class News extends Equatable {
   }
 
   @override
-  List<Object?> get props => [bankName, accountName, accountNumber];
+  List<Object?> get props => [datetime, headline, id, image, source, url];
 }

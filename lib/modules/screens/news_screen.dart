@@ -1,6 +1,16 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:finance_news/core/helper/navigation.dart';
 import 'package:finance_news/core/providers/news_provider.dart';
 import 'package:finance_news/core/providers/paginated_news_provider.dart';
+import 'package:finance_news/core/utils/app_colors.dart';
+import 'package:finance_news/core/utils/app_styles.dart';
+import 'package:finance_news/core/utils/converters.dart';
+import 'package:finance_news/core/utils/extensions.dart';
+import 'package:finance_news/data/models/news.dart';
+import 'package:finance_news/data/repos/user_repo.dart';
+import 'package:finance_news/modules/screens/news_detail_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class NewsScreen extends ConsumerStatefulWidget {
@@ -11,40 +21,140 @@ class NewsScreen extends ConsumerStatefulWidget {
 }
 
 class _NewsPageState extends ConsumerState<NewsScreen> {
-  final ScrollController _controller = ScrollController();
+  String? _firstName;
+  // final ScrollController _controller = ScrollController();
+
+  _getFirstName() async {
+    _firstName = await UserRepo.getFirstName();
+  }
 
   @override
   void initState() {
     super.initState();
-    _controller.addListener(_onScroll);
+    // _controller.addListener(_onScroll);
+    _getFirstName();
   }
 
-  void _onScroll() {
+  /*void _onScroll() {
     if (_controller.position.pixels == _controller.position.maxScrollExtent) {
       ref.read(paginatedNewsProvider.notifier).loadNextPage();
     }
   }
-
+*/
   @override
   Widget build(BuildContext context) {
     final newsList = ref.watch(paginatedNewsProvider);
 
     return Scaffold(
-      appBar: AppBar(title: Text('Paginated Real-Time News')),
-      body: ListView.builder(
-        controller: _controller,
-        itemCount: newsList.length,
-        itemBuilder: (context, index) => ListTile(
-          title: Text(newsList[index]),
+      backgroundColor: AppColor.black,
+      body: SafeArea(
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.only(
+                left: 16.w,
+                right: 16.w,
+                top: 22.h,
+                bottom: 22.h,
+              ),
+              decoration: const BoxDecoration(
+                color: Colors.transparent,
+              ),
+              child: Text(
+                _firstName != null ? 'Hey $_firstName' : '',
+                style: AppStyle.titleStyleWhite(context),
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                //controller: _controller,
+                shrinkWrap: true,
+                padding: EdgeInsets.zero,
+                itemCount: newsList.length,
+                itemBuilder: (context, index) => ListTile(
+                  title: NewsTile(
+                    firstName: _firstName ?? '',
+                    news: newsList[index],
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  @override
+  /*@override
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }*/
+}
+
+class NewsTile extends StatelessWidget {
+  const NewsTile({super.key, required this.firstName, required this.news});
+
+  final String firstName;
+  final News news;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        Navigation.gotoWidget(
+          context,
+          NewsDetailScreen(
+            firstName: firstName,
+            url: news.url ?? '',
+          ),
+        );
+      },
+      child: Padding(
+        padding: EdgeInsets.all(16.h),
+        child: Row(
+          children: [
+            CachedNetworkImage(
+              imageUrl: news.image ?? '',
+              placeholder: (context, url) => CircularProgressIndicator(),
+              errorWidget: (context, url, error) => Icon(Icons.error),
+              width: 100.w,
+              height: 100.h,
+              fit: BoxFit.cover,
+            ),
+            /*Image.network(
+              'src',
+              height: 100.h,
+              width: 100.w,
+            ),*/
+            16.width,
+            Expanded(
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        news.source ?? '',
+                        style: AppStyle.bodyWhiteSmallStyle(context),
+                      ),
+                      Text(
+                        formatUnixDate(news.datetime),
+                        style: AppStyle.bodyWhiteSmallStyle(context),
+                      ),
+                    ],
+                  ),
+                  8.height,
+                  Text(
+                    news.headline ?? '',
+                    style: AppStyle.bodyWhiteSmallBig(context),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
