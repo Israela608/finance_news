@@ -1,0 +1,54 @@
+name: finance_news
+description: "A new Flutter project."
+
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.6.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  flutter_screenutil: ^5.9.3
+  hooks_riverpod: ^2.6.1
+  web_socket_channel: ^3.0.3
+  page_transition: ^2.2.1
+  flutter_hooks: ^0.21.2
+  url_launcher: ^6.3.1
+  webview_flutter: ^4.11.0
+  equatable: ^2.0.7
+  flutter_svg: ^2.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_launcher_icons: ^0.14.3
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/app_logo.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  adaptive_icon_background: "#000000"
+  remove_alpha_ios: true
+  background_color_ios: "#000000"
+  web:
+    generate: true
+    image_path: "assets/app_logo.png"
+    background_color: "#hexcode"
+    theme_color: "#hexcode"
+  windows:
+    generate: true
+    image_path: "assets/app_logo.png"
+    icon_size: 48 # min:48, max:256, default: 48
+
+  flutter_lints: ^5.0.0
+
+
+flutter:
+
+  uses-material-design: true
