@@ -9,6 +9,7 @@ A Flutter application designed to provide users with the latest finance news. Th
 - **WebView**: Display web pages within the app.
 - **Responsive Design**: Designed to work across both Android and iOS devices.
 - **Custom Launcher Icons**: App icons are configured for various platforms, including Android, iOS, web, and Windows.
+- **Pull to Refresh**
 
 ## Screenshots
 
