@@ -1,3 +1,4 @@
+import 'package:finance_news/data/constants/strings.dart';
 import 'package:finance_news/data/models/news.dart';
 import 'package:finance_news/data/models/response.dart';
 import 'package:finance_news/data/repos/news_repo.dart';
@@ -12,14 +13,14 @@ class NewsNotifier extends StateNotifier<NewsState> {
   NewsRepo newsRepo;
 
   Future<void> fetchNews() async {
-    state = state.setLoading('Loading News');
+    state = state.setLoading(Strings.loadingNews);
 
     try {
       final newsList = await newsRepo.getNews();
 
       // Update the state with new appointments
       state = state.copyWith(
-        response: Response.success('News Loaded Successfully'),
+        response: Response.success(Strings.newsLoaded),
         news: newsList,
       );
     } catch (e) {

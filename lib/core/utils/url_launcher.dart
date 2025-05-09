@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:finance_news/data/constants/strings.dart';
 import 'package:flutter/foundation.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -12,6 +13,6 @@ Future<void> launchURL(String url) async {
       //mode: LaunchMode.externalApplication,
     );
   } catch (e) {
-    log('Could not launch: $e => $url');
+    log('${Strings.couldNotLaunch}: $e => $url');
   }
 }

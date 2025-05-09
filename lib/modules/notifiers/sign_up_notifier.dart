@@ -42,6 +42,5 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
     await Future.delayed(Duration(seconds: 1), () {
       state = state.copyWith(response: response);
     });
-    //state = state.copyWith(response: response);
   }
 }

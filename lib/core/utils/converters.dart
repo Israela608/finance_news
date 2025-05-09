@@ -1,3 +1,5 @@
+import 'package:finance_news/data/constants/strings.dart';
+
 String formatUnixDate(int? timestamp) {
   if (timestamp == null) return '';
   final date = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
@@ -5,10 +7,6 @@ String formatUnixDate(int? timestamp) {
 }
 
 String _monthName(int month) {
-  const months = [
-    '', // index 0 unused
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-  ];
+  const months = Strings.months;
   return months[month];
 }

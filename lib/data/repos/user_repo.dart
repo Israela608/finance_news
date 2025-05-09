@@ -2,8 +2,8 @@ import 'dart:developer';
 
 import 'package:finance_news/core/helper/database_helper.dart';
 import 'package:finance_news/core/utils/constants.dart';
+import 'package:finance_news/data/constants/strings.dart';
 import 'package:finance_news/data/models/response.dart';
-import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final userRepoProvider = Provider<UserRepo>((ref) {
@@ -20,10 +20,10 @@ class UserRepo {
         dbHelper.save(AppConst.firstName, firstName),
         dbHelper.save(AppConst.lastName, lastName),
       ]);
-      return Response.success('Saved Successfully!');
+      return Response.success(Strings.saveSuccess);
     } catch (e) {
-      log('Failed to save user credentials: $e');
-      return Response.error('Failed to save user credentials');
+      log('${Strings.saveFailed}: $e');
+      return Response.error(Strings.saveFailed);
     }
   }
 
@@ -32,46 +32,8 @@ class UserRepo {
       final dbHelper = DatabaseHelper();
       return await dbHelper.read(AppConst.firstName);
     } catch (e) {
-      log('Failed to get First Name: $e');
+      log('${Strings.getFirstNameFailed}: $e');
       return null;
     }
   }
 }
-
-/*
-class UserRepo {
-  UserRepo({required this.apiClient});
-  ApiClient apiClient;
-
-  //Method that saves the user token from the server, so we can use it next time we log in
-  Future<Response> saveUserCredentials(
-      String firstName, String lastName) async {
-    try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-
-      await Future.wait([
-        prefs.setString(ApiConstants.token, token),
-        prefs.setString(ApiConstants.refreshToken, refreshToken),
-      ]);
-
-      return Response.success(true);
-    } catch (e) {
-      debugPrint('Failed to save user credentials: $e');
-      return Response.error('Failed to save user credentials');
-    }
-  }
-
-  //Method that saves the user token from the server, so we can use it next time we log in
-  static Future<String?> getFirstName() async {
-    String? firstName;
-
-    try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      firstName = prefs.getString(ApiConstants.token);
-    } catch (e) {
-      debugPrint('Failed to First Name: $e');
-    }
-    return firstName;
-  }
-}
-*/

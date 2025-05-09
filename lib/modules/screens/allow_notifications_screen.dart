@@ -5,6 +5,7 @@ import 'package:finance_news/core/utils/app_colors.dart';
 import 'package:finance_news/core/utils/app_styles.dart';
 import 'package:finance_news/core/utils/extensions.dart';
 import 'package:finance_news/core/utils/utils.dart';
+import 'package:finance_news/data/constants/strings.dart';
 import 'package:finance_news/modules/screens/news_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -34,13 +35,13 @@ class AllowNotificationsScreen extends StatelessWidget {
                   ),
                   24.height,
                   Text(
-                    'Get the most out of Blott ✅',
+                    Strings.allowNotifTitle,
                     textAlign: TextAlign.center,
                     style: AppStyle.titleStyleSmall(context),
                   ),
                   16.height,
                   Text(
-                    'Allow notifications to stay in the loop with your payments, requests and groups.',
+                    Strings.allowNotifSubtitle,
                     style: AppStyle.subtitleStyle(context),
                   ),
                 ],
@@ -75,9 +76,8 @@ class ContinueButton extends StatelessWidget {
                 context: context,
                 builder: (context) => AppAlertDialog(
                   onConfirm: () async => await openAppSettings(),
-                  title: 'Notification Permission',
-                  subtitle:
-                      'Notification permission should Be granted to use this feature, would you like to go to app settings to allow Notifications?',
+                  title: Strings.notifDialogTitle,
+                  subtitle: Strings.notifDialogSubtitle,
                 ),
               );
             }
@@ -91,7 +91,7 @@ class ContinueButton extends StatelessWidget {
         } catch (e) {
           showCustomSnackBar(
             context,
-            message: 'Permission to send notifications denied!',
+            message: Strings.permissionDeniedMessage,
           );
         }
       },
@@ -104,7 +104,7 @@ class ContinueButton extends StatelessWidget {
         ),
         child: Center(
           child: Text(
-            'Continue',
+            Strings.continueButton,
             style: AppStyle.buttonTextStyle(context),
           ),
         ),

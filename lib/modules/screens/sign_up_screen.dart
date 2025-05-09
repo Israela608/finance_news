@@ -7,9 +7,9 @@ import 'package:finance_news/core/utils/app_styles.dart';
 import 'package:finance_news/core/utils/extensions.dart';
 import 'package:finance_news/core/utils/utils.dart';
 import 'package:finance_news/core/utils/validators.dart';
+import 'package:finance_news/data/constants/strings.dart';
 import 'package:finance_news/modules/providers/sign_up_provider.dart';
 import 'package:finance_news/modules/screens/allow_notifications_screen.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -43,7 +43,7 @@ class SignUpScreen extends StatelessWidget {
                   ),
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'Your legal name',
+                    Strings.legalNameTitle,
                     style: AppStyle.titleStyle(context),
                   ),
                 ),
@@ -59,7 +59,7 @@ class SignUpScreen extends StatelessWidget {
                             //const HeightSpacer(height: 80),
                             16.height,
                             Text(
-                              'We need to know a bit about you so that we can create your account.',
+                              Strings.signUpSubtitle,
                               style: AppStyle.subtitleStyle(context),
                             ),
                             24.height,
@@ -93,7 +93,7 @@ class FirstNameBox extends HookConsumerWidget {
 
     return PlainTextField(
       textController: textController,
-      hintText: 'First name',
+      hintText: Strings.firstNameHint,
       keyboardType: TextInputType.text,
       textInputAction: TextInputAction.next,
       validatorCallback: Validators.validateAlpha(
@@ -122,7 +122,7 @@ class LastNameBox extends HookConsumerWidget {
 
     return PlainTextField(
       textController: textController,
-      hintText: 'Last name',
+      hintText: Strings.lastNameHint,
       keyboardType: TextInputType.text,
       textInputAction: TextInputAction.next,
       validatorCallback: Validators.validateAlpha(
@@ -161,13 +161,15 @@ class NextButton extends HookConsumerWidget {
           if (response.isSuccess) {
             return Navigation.gotoWidget(
               context,
-             // replacePreviousScreen: true,
+              replacePreviousScreen: true,
               AllowNotificationsScreen(),
             );
           } else {
             showCustomSnackBar(
               context,
-              message: response.message,
+              message: response.message.isNotEmpty
+                  ? response.message
+                  : Strings.signUpErrorMessage,
             );
           }
         }

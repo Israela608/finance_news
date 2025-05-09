@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:finance_news/core/utils/app_colors.dart';
 import 'package:finance_news/core/utils/app_styles.dart';
+import 'package:finance_news/data/constants/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -82,7 +83,7 @@ class _NewsDetailScreen extends State<NewsDetailScreen> {
                 ),
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  'Hey ${widget.firstName}',
+                  '${Strings.greeting} ${widget.firstName}',
                   textScaler: TextScaler.noScaling,
                   style: AppStyle.titleStyleWhite(context),
                 ),

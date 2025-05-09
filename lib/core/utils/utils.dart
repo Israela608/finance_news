@@ -2,39 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-double getDeviceWidth(BuildContext context) {
-  return MediaQuery.of(context).size.width;
-}
-
-double getDeviceHeight(BuildContext context) {
-  return MediaQuery.of(context).size.height;
-}
-
-TextTheme getTextTheme(BuildContext context) {
-  return Theme.of(context).textTheme;
-}
-
-double getHeightScale(
-  double height,
-  BuildContext context,
-) {
-  return MediaQuery.textScalerOf(context).scale(height).h;
-}
-
-double getWidthScale(
-  double width,
-  BuildContext context,
-) {
-  return MediaQuery.textScalerOf(context).scale(width).h;
-}
-
-double getRadiusScale(
-  double radius,
-  BuildContext context,
-) {
-  return MediaQuery.textScalerOf(context).scale(radius).r;
-}
-
 String getSvgPath(String svg) {
   return 'assets/svgs/$svg.svg';
 }
