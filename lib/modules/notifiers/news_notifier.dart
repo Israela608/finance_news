@@ -1,5 +1,4 @@
 import 'package:finance_news/data/constants/strings.dart';
-import 'package:finance_news/data/models/news.dart';
 import 'package:finance_news/data/models/response.dart';
 import 'package:finance_news/data/repos/news_repo.dart';
 import 'package:finance_news/modules/models/news_state.dart';
@@ -7,7 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class NewsNotifier extends StateNotifier<NewsState> {
   NewsNotifier(this.newsRepo) : super(NewsState()) {
-    fetchNews();
+    // fetchNews();
   }
 
   NewsRepo newsRepo;
