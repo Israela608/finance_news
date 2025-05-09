@@ -79,6 +79,19 @@ flutter run --android
 
 ```
 
+## 🔐 API Key Setup
+
+This project uses an API key that **should not be committed to version control**.
+
+Create a file named `config.dart` in the `lib/data/constants/` directory and add your API key like this:
+
+```dart
+// lib/data/constants/config.dart
+
+const String API_KEY = 'YOUR_API_KEY_HERE';
+```
+Make sure this file is not tracked by Git (already handled in .gitignore).
+
 ## Code Structure
 ```
 lib/common/: Custom widgets like text fields, buttons, and loading indicators.
@@ -89,6 +102,7 @@ lib/data/: Contains models used for user data and API responses, services, repos
 
 lib/modules/: Contains the main screens and View architecture.
 ```
+
 
 ## Dependencies
 **flutter_launcher_icons:** To generate app icons for various platforms.
