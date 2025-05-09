@@ -1,4 +1,5 @@
 import 'package:finance_news/core/utils/constants.dart';
+import 'package:finance_news/data/constants/strings.dart';
 import 'package:finance_news/data/repos/user_repo.dart';
 import 'package:finance_news/modules/screens/allow_notifications_screen.dart';
 import 'package:finance_news/modules/screens/news_screen.dart';
@@ -37,7 +38,7 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       builder: (context, child) {
         return MaterialApp(
-          title: 'Finance News',
+          title: Strings.appName,
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),

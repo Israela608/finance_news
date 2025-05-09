@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:finance_news/data/constants/api_constants.dart';
+import 'package:finance_news/data/constants/strings.dart';
 import 'package:finance_news/data/models/app_exceptions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -40,9 +41,9 @@ class ApiClient {
 
       responseJson = _returnResponse(response);
     } on SocketException {
-      throw FetchDataException('No Internet connection');
+      throw FetchDataException(Strings.noInternet);
     } on TimeoutException {
-      throw FetchDataException('Request timed out');
+      throw FetchDataException(Strings.requestTimeout);
     }
     return responseJson;
   }
@@ -53,7 +54,7 @@ class ApiClient {
       return json.decode(response.body);
     }
 
-    String message = 'There was an Error!';
+    String message = Strings.genericError;
 
     log('Error: $message : ${response.statusCode}');
     switch (response.statusCode) {
@@ -72,7 +73,7 @@ class ApiClient {
       case 500:
       default:
         throw FetchDataException(
-            'Error occurred while communicating with the server. Status code: ${response.statusCode}');
+            '${Strings.communicationError}. Status code: ${response.statusCode}');
     }
   }
 }

@@ -1,12 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:finance_news/common/loading_stack.dart';
 import 'package:finance_news/core/helper/navigation.dart';
-import 'package:finance_news/core/providers/news_provider.dart';
-import 'package:finance_news/core/providers/paginated_news_provider.dart';
 import 'package:finance_news/core/utils/app_colors.dart';
 import 'package:finance_news/core/utils/app_styles.dart';
 import 'package:finance_news/core/utils/converters.dart';
 import 'package:finance_news/core/utils/extensions.dart';
+import 'package:finance_news/data/constants/strings.dart';
 import 'package:finance_news/data/models/news.dart';
 import 'package:finance_news/data/repos/user_repo.dart';
 import 'package:finance_news/modules/providers/news_provider.dart';
@@ -56,7 +55,9 @@ class NewsScreen extends HookConsumerWidget {
                   ),
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    _firstName.value != null ? 'Hey ${_firstName.value}' : '',
+                    _firstName.value != null
+                        ? '${Strings.greeting} ${_firstName.value}'
+                        : '',
                     textScaler: TextScaler.noScaling,
                     style: AppStyle.titleStyleWhite(context),
                   ),

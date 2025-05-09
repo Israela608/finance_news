@@ -1,3 +1,4 @@
+import 'package:finance_news/data/constants/strings.dart';
 import 'package:flutter/widgets.dart';
 
 typedef ValidateFunction = String? Function(String? value);
@@ -14,11 +15,11 @@ class Validators {
       isValidated != null ? Future.microtask(() => isValidated(false)) : null;
 
       if (value == null || value.isEmpty) {
-        return error ?? 'Field is required.';
+        return error ?? Strings.fieldRequired;
       }
       final RegExp nameExp = RegExp(r'^[A-Za-z ]+$');
       if (!nameExp.hasMatch(value)) {
-        return error ?? 'Please enter only alphabetical characters.';
+        return error ?? Strings.onlyAlphabetAllowed;
       }
 
       Future.microtask(() {
