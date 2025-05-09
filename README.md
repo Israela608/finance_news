@@ -40,7 +40,7 @@ git clone https://github.com/Israela608/finance_news.git
 ```
 
 ```bash
-   cd finance_news
+cd finance_news
 ```
 
 **Install dependencies:**
