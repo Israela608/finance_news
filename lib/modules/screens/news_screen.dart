@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:finance_news/common/loading_stack.dart';
+import 'package:finance_news/common/show_custom_snackbar.dart';
 import 'package:finance_news/core/helper/navigation.dart';
 import 'package:finance_news/core/utils/app_colors.dart';
 import 'package:finance_news/core/utils/app_styles.dart';
@@ -22,12 +23,24 @@ class NewsScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final _firstName = useState<String?>(null);
 
-    _getFirstName() async {
+    _fetchNews() async {
+      await ref.read(newsProvider.notifier).fetchNews();
+      final response = ref.read(newsProvider).response;
+      if (response.isError) {
+        showCustomSnackBar(
+          context,
+          message: response.message,
+        );
+      }
+    }
+
+    _init() async {
       _firstName.value = await UserRepo.getFirstName();
+      _fetchNews();
     }
 
     useEffect(() {
-      _getFirstName();
+      _init();
 
       return null;
     }, []);
@@ -36,7 +49,7 @@ class NewsScreen extends HookConsumerWidget {
       loadingProvider: newsLoadingProvider,
       child: RefreshIndicator(
         onRefresh: () async {
-          ref.read(newsProvider.notifier).fetchNews();
+          _fetchNews();
         },
         child: Scaffold(
           backgroundColor: AppColor.black,
