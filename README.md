@@ -13,15 +13,19 @@ A Flutter application designed to provide users with the latest finance news. Th
 ## Screenshots
 
 ### 1. User Registration Screen
+![Screenshot_20250509_020027](https://github.com/user-attachments/assets/4de40209-acf2-41fe-871a-9de630f2e8d7)
 
 
 ### 2. Allow Notifications Screen
+![Screenshot_20250509_020039](https://github.com/user-attachments/assets/bfb98d1b-6a38-45c0-9bbf-3e3cc335cd3f)
 
 
 ### 3. News Screen
+![Screenshot_20250509_015656](https://github.com/user-attachments/assets/913bb9d8-ab89-4a3e-bc66-43e975f57fb9)
 
 
 ### 4. News Detail WebView
+![Screenshot_20250509_015742](https://github.com/user-attachments/assets/38fed1e2-ca21-4554-90ae-1d38bb85806d)
 
 
 ## Setup Instructions
