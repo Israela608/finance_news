@@ -92,7 +92,7 @@ class _NewsDetailScreen extends State<NewsDetailScreen> {
                 child: Stack(
                   children: [
                     WebViewWidget(controller: controller),
-                    if (loadingPercentage < 100)
+                    if (loadingPercentage < 50)
                       Center(
                         child: CircularProgressIndicator(
                           color: AppColor.primary600,
